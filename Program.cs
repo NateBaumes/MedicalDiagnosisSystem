@@ -10,20 +10,20 @@ namespace MedicalDiagnosis
             Console.WriteLine("Welcome to the Medical Diagnosis System");
 
             // Collect patient data
-            string patientName = GetPatientName();
-            int age = GetAge();
-            string bloodType = GetBloodType();
-            string rhFactor = GetRhFactor();
-            List<string> symptoms = GetSymptoms();
-
-            // Determine full blood type
-            string fullBloodType = bloodType + rhFactor;
+            Patient patient = new Patient
+            {
+                Name = GetPatientName(),
+                Age = GetAge(),
+                BloodType = GetBloodType(),
+                RhFactor = GetRhFactor(),
+                Symptoms = GetSymptoms()
+            };
 
             // Identify possible ailments
-            List<string> possibleAilments = IdentifyAilments(symptoms);
+            List<string> possibleAilments = Diagnosis.IdentifyAilments(patient.Symptoms);
 
             // Display results
-            DisplayResults(patientName, age, fullBloodType, possibleAilments);
+            DisplayResults(patient, possibleAilments);
         }
 
         static string GetPatientName()
@@ -85,46 +85,12 @@ namespace MedicalDiagnosis
             return symptoms;
         }
 
-        static List<string> IdentifyAilments(List<string> symptoms)
-        {
-            // A simple rule-based system to identify possible ailments
-            List<string> ailments = new List<string>();
-
-            if (symptoms.Contains("fever") && symptoms.Contains("cough"))
-            {
-                ailments.Add("Common Cold");
-            }
-            if (symptoms.Contains("chest pain"))
-            {
-                ailments.Add("Heart Condition");
-            }
-            if (symptoms.Contains("headache") && symptoms.Contains("sensitivity to light"))
-            {
-                ailments.Add("Migraine");
-            }
-            if (symptoms.Contains("shortness of breath"))
-            {
-                ailments.Add("Asthma or Respiratory Issue");
-            }
-            if (symptoms.Contains("abdominal pain"))
-            {
-                ailments.Add("Gastrointestinal Issue");
-            }
-
-            if (ailments.Count == 0)
-            {
-                ailments.Add("General Checkup Advised");
-            }
-
-            return ailments;
-        }
-
-        static void DisplayResults(string patientName, int age, string fullBloodType, List<string> possibleAilments)
+        static void DisplayResults(Patient patient, List<string> possibleAilments)
         {
             Console.WriteLine("\n--- Diagnosis Report ---");
-            Console.WriteLine($"Patient: {patientName}");
-            Console.WriteLine($"Age: {age}");
-            Console.WriteLine($"Blood Type: {fullBloodType}");
+            Console.WriteLine($"Patient: {patient.Name}");
+            Console.WriteLine($"Age: {patient.Age}");
+            Console.WriteLine($"Blood Type: {patient.BloodType} {patient.RhFactor}");
             Console.WriteLine("Possible Ailments:");
             foreach (string ailment in possibleAilments)
             {
